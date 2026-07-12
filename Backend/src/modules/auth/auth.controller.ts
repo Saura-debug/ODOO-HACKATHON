@@ -3,24 +3,22 @@ import { loginService } from "./auth.service";
 import { loginSchema } from "./auth.validation";
 import { AuthRequest } from "../../middlewares/ auth.middleware";
 import { getMeService } from "./auth.service";
+import { asyncHandler } from "../../utils/asyncHandler";
 
-export const loginController = async (
+export const loginController = asyncHandler( async (
   req: Request,
   res: Response
 ) => {
-  try {
+  
     const body = loginSchema.parse(req.body);
 
     const result = await loginService(body);
 
     res.status(200).json(result);
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+
+   
   }
-};
+);
 
 
 

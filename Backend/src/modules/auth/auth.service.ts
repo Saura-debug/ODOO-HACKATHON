@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
 import { LoginInput } from "./auth.validation";
+import { ApiError } from "../../utils/ApiError";
 
 export const loginService = async (data: LoginInput) => {
   const user = await prisma.user.findUnique({
@@ -15,7 +16,7 @@ export const loginService = async (data: LoginInput) => {
   });
 
   if (!user) {
-    throw new Error("Invalid Credentials");
+throw new ApiError(401, "Invalid Credentials");
   }
 
   const isPasswordCorrect = await bcrypt.compare(
@@ -24,7 +25,7 @@ export const loginService = async (data: LoginInput) => {
   );
 
   if (!isPasswordCorrect) {
-    throw new Error("Invalid Credentials");
+    throw new ApiError(401, "Invalid Credentials");
   }
 
   const token = jwt.sign(

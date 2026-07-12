@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { createVehicleSchema } from "./vehicle.validation";
+import { asyncHandler } from "../../utils/asyncHandler";
 
 
 
@@ -12,22 +13,31 @@ import {
 } from "./vehicle.service";
 
 
-export const createVehicleController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
+// export const createVehicleController = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   try {
+//     const body = createVehicleSchema.parse(req.body);
+
+//     const vehicle = await createVehicleService(body);
+
+//     res.status(201).json(vehicle);
+//   } catch (error: any) {
+//     res.status(400).json({
+//       message: error.message,
+//     });
+//   }
+// };
+export const createVehicleController = asyncHandler(
+  async (req, res) => {
     const body = createVehicleSchema.parse(req.body);
 
     const vehicle = await createVehicleService(body);
 
     res.status(201).json(vehicle);
-  } catch (error: any) {
-    res.status(400).json({
-      message: error.message,
-    });
   }
-};
+);
 
 export const getAllVehiclesController = async (
   _: Request,
@@ -38,7 +48,7 @@ export const getAllVehiclesController = async (
   res.json(vehicles);
 };
 
-export const getVehicleByIdController = async (
+export const getVehicleByIdController =  async (
   req: Request,
   res: Response
 ) => {

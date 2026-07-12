@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { errorHandler } from "./middlewares/error.middleware";
+
+
 
 import routes from "./routes";
 
@@ -13,5 +16,26 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api", routes);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.use(errorHandler);
 
 export default app;
