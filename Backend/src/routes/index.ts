@@ -2,6 +2,10 @@ import { Router } from "express";
 import { prisma } from "../config/prisma";
 import authRoutes from "../modules/auth/ auth.routes";
 import vehicleRoutes from "../modules/vehicle/vehicle.routes";
+import driverRoutes from "../modules/driver/driver.routes";
+import tripRoutes from "../modules/trip/trip.routes";
+
+
 
 const router = Router();
 
@@ -28,5 +32,7 @@ router.get("/health", async (_, res) => {
 });
 router.use("/auth", authRoutes);
 router.use("/vehicles", vehicleRoutes);
+router.use("/drivers", driverRoutes);
+router.use("/trips", tripRoutes);
 
 export default router;
