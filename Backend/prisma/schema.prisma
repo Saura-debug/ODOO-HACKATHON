@@ -4,11 +4,214 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+   
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  RETIRED
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_TRIP
+  OFF_DUTY
+  SUSPENDED
+}
+
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
+
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ExpenseType {
+  FUEL
+  TOLL
+  MAINTENANCE
+  OTHER
+}
+
+model Role {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id String @id @default(cuid())
+
+  name String
+
+  email String @unique
+
+  password String
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  status UserStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model Vehicle {
+  id String @id @default(cuid())
+
+  registrationNumber String @unique
+  vehicleName        String
+
+  model String
+
+  type String
+
+  maxLoadCapacity Float
+
+  odometer Float
+
+  acquisitionCost Float
+
+  status VehicleStatus @default(AVAILABLE)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  trips Trip[]
+
+  maintenances Maintenance[]
+
+  fuelLogs FuelLog[]
+}
+
+model Driver {
+  id String @id @default(cuid())
+
+  name String
+
+  licenseNumber String @unique
+
+  licenseCategory String
+
+  licenseExpiry DateTime
+
+  contactNumber String
+
+  safetyScore Float @default(100)
+
+  status DriverStatus @default(AVAILABLE)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  trips Trip[]
+}
+
+model Trip {
+  id String @id @default(cuid())
+
+  source      String
+  destination String
+
+  cargoWeight     Float
+  plannedDistance Float
+
+  startOdometer Float?
+  endOdometer   Float?
+
+  completedAt DateTime?
+
+  status TripStatus @default(DRAFT)
+
+  vehicleId String
+  driverId  String
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  driver  Driver  @relation(fields: [driverId], references: [id])
+
+  expenses Expense[]
+  fuelLogs FuelLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Maintenance {
+  id String @id @default(cuid())
+
+  title String
+
+  description String?
+
+  cost Float?
+
+  status MaintenanceStatus @default(OPEN)
+
+  vehicleId String
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model FuelLog {
+  id String @id @default(cuid())
+
+  liters Float
+  cost   Float
+  date   DateTime
+
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  tripId String?
+  trip   Trip?   @relation(fields: [tripId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Expense {
+  id String @id @default(cuid())
+
+  type ExpenseType
+
+  amount Float
+
+  description String?
+
+  tripId String
+
+  trip Trip @relation(fields: [tripId], references: [id])
+
+  createdAt DateTime @default(now())
 }
