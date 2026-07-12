@@ -7,6 +7,7 @@ import tripRoutes from "../modules/trip/trip.routes";
 import maintenanceRoutes from "../modules/ maintenance/maintenance.routes";
 import fuelRoutes from "../modules/ fuel/fuel.routes";
 import expenseRoutes from "../modules/ expense/expense.routes";
+import dashboardRoutes from "../modules/dashboard/dashboard.routes";
 
 
 
@@ -37,6 +38,9 @@ router.get("/health", async (_, res) => {
     });
   }
 });
+
+
+router.use("/dashboard", dashboardRoutes);
 router.use("/auth", authRoutes);
 router.use("/vehicles", vehicleRoutes);
 router.use("/drivers", driverRoutes);
