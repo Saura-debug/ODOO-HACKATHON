@@ -4,6 +4,12 @@ import authRoutes from "../modules/auth/ auth.routes";
 import vehicleRoutes from "../modules/vehicle/vehicle.routes";
 import driverRoutes from "../modules/driver/driver.routes";
 import tripRoutes from "../modules/trip/trip.routes";
+import maintenanceRoutes from "../modules/ maintenance/maintenance.routes";
+import fuelRoutes from "../modules/ fuel/fuel.routes";
+
+
+
+
 
 
 
@@ -34,5 +40,7 @@ router.use("/auth", authRoutes);
 router.use("/vehicles", vehicleRoutes);
 router.use("/drivers", driverRoutes);
 router.use("/trips", tripRoutes);
+router.use("/maintenance", maintenanceRoutes);
+router.use("/fuel", fuelRoutes);
 
 export default router;
