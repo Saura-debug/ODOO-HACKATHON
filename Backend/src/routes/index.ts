@@ -6,6 +6,7 @@ import driverRoutes from "../modules/driver/driver.routes";
 import tripRoutes from "../modules/trip/trip.routes";
 import maintenanceRoutes from "../modules/ maintenance/maintenance.routes";
 import fuelRoutes from "../modules/ fuel/fuel.routes";
+import expenseRoutes from "../modules/ expense/expense.routes";
 
 
 
@@ -42,5 +43,6 @@ router.use("/drivers", driverRoutes);
 router.use("/trips", tripRoutes);
 router.use("/maintenance", maintenanceRoutes);
 router.use("/fuel", fuelRoutes);
+router.use("/expenses", expenseRoutes);
 
 export default router;
